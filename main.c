@@ -22,14 +22,42 @@ void listar(struct Contato contatos[],int total) {
         return;
     }
     for (int i=0;i<total;i++) {
-        printf("\n%s\n",contatos[i].nome);
-        printf("%s\n",contatos[i].telefone);
+        printf("\n%s - ",contatos[i].nome);
+        printf("%s - ",contatos[i].telefone);
         printf("%s\n",contatos[i].email);
     }
 }
 
-void busca() {
+int buscarIndice(struct Contato contatos[], int total, char nomeBuscado[]) { // função para achar o indice do contato pelo nome digitado (nomeBuscado)
+    for (int i = 0; i < total; i++) {
+        if (strcmp(contatos[i].nome, nomeBuscado) == 0) {
+            return i; // achou
+        }
+    }
+    return -1; // não achou
+}
 
+void busca(struct Contato contatos[], int total) { // função para 2) buscar
+    if (total==0){
+        printf("Nenhum contato cadastrado.");
+        return;
+    }
+
+    char nomeBuscado[50];
+
+    printf("\nDigite o nome do contato que quer achar: ");
+    scanf("%49s",nomeBuscado);
+
+    int index = buscarIndice(contatos,total,nomeBuscado); // chamando a função que acha o índice pelo nome
+
+    if (index==-1) {
+        printf("\nContato não encontrado.");
+    } else {
+        printf("\nContato encontrado: \n");
+        printf("Nome: %s\n",contatos[index].nome);
+        printf("Telefone: %s\n",contatos[index].telefone);
+        printf("E-mail: %s\n",contatos[index].email);
+    }
 }
 
 void editar() {
@@ -66,12 +94,14 @@ int main()
             total++;
         } else if (option==2) {
             listar(contatos,total);
+        } else if (option==3) {
+            busca(contatos,total);
         }
 
     } while(option!=7);
     
     if (option == 7) {
-        printf("Encerrando o programa...");
+        printf("\nEncerrando o programa...");
         return 0;
     }
 
