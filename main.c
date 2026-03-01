@@ -7,13 +7,20 @@ struct Contato {
     char email[70];
 }; 
 
-void cadastro(struct Contato contatos[], int total) { // void - sem retorno e sem tipo definido
+void cadastro(struct Contato contatos[], int *total) { // void - sem retorno e sem tipo definido
+    if (*total >= 100) {
+        printf("Limite de contatos atingido.");
+        return;
+    }
+    
     printf("\nDigite o nome: ");
-    scanf("%49s", contatos[total].nome);
+    scanf("%49s", contatos[*total].nome);
     printf("Telefone: ");
-    scanf("%19s",contatos[total].telefone);
+    scanf("%19s",contatos[*total].telefone);
     printf("E-mail: ");
-    scanf("%69s",contatos[total].email);
+    scanf("%69s",contatos[*total].email);
+
+    (*total)++;
 }
 
 void listar(struct Contato contatos[],int total) {
@@ -60,11 +67,61 @@ void busca(struct Contato contatos[], int total) { // função para 2) buscar
     }
 }
 
-void editar() {
-
+void editarContato(struct Contato *c) {
+    printf("\n--- Editar Contato ---\n");
+    printf("Novo nome: ");
+    scanf("%49s",c->nome);
+    printf("Novo telefone: ");
+    scanf("%19s",c->telefone);
+    printf("Novo e-mail: ");
+    scanf("%69s",c->email);
+    printf("Contato atualizado com sucesso.");
 }
 
-void excluir() {
+void editar(struct Contato contatos[],int total) {
+    if (total==0) {
+        printf("Nenhum contato cadastrado.");
+        return;
+    }
+
+    char nomeBuscado[50];
+
+    printf("Digite o nome do contato que quer editar: ");
+    scanf("%49s",nomeBuscado);
+
+    int index=buscarIndice(contatos,total,nomeBuscado);
+
+    if (index == -1) {
+        printf("Contato não encontrado.");
+        return;
+    }
+    editarContato(&contatos[index]); //passando ponteiro
+}
+
+void excluir(struct Contato contatos[],int *total) {
+    if (*total==0) {
+        printf("Nenhum contato encontrado.")
+        return;
+    }
+    char nomeBuscado[50];
+
+    printf("Digite o nome do contato que quer excluir: ");
+    scanf("%49s",nomeBuscado);
+
+    int index=buscarIndice(contatos,total,nomeBuscado);
+
+    if(index == -1) {
+        printf("Contato não encontrado.");
+        return; 
+    }
+ 
+    /* "puxar" os contatos para esquerda para preencher o buraco */
+    for (int i = index; i < (*total) - 1; i++) {
+        contatos[i] = contatos[i + 1];
+    }
+
+    (*total)--;
+    printf("Contato excluído com sucesso.")
 
 }
 
