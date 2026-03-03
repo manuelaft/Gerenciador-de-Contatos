@@ -100,7 +100,7 @@ void editar(struct Contato contatos[],int total) {
 
 void excluir(struct Contato contatos[],int *total) {
     if (*total==0) {
-        printf("Nenhum contato encontrado.")
+        printf("Nenhum contato encontrado.");
         return;
     }
     char nomeBuscado[50];
@@ -108,7 +108,7 @@ void excluir(struct Contato contatos[],int *total) {
     printf("Digite o nome do contato que quer excluir: ");
     scanf("%49s",nomeBuscado);
 
-    int index=buscarIndice(contatos,total,nomeBuscado);
+    int index=buscarIndice(contatos, *total,nomeBuscado);
 
     if(index == -1) {
         printf("Contato não encontrado.");
@@ -121,12 +121,35 @@ void excluir(struct Contato contatos[],int *total) {
     }
 
     (*total)--;
-    printf("Contato excluído com sucesso.")
+    printf("Contato excluído com sucesso.");
 
 }
 
-void stats() {
+/* Exemplo de função recursiva simples: contar quantos nomes têm tamanho > N */
+int nomes(struct Contato contatos[], int total, int n) {
+    if (total == 0) {
+        return 0;
+    }
 
+    int contaAtual = 0;
+    if ((int)strlen(contatos[total - 1].nome) > n) {
+        contaAtual = 1;
+    }
+
+    return contaAtual + contarNomesMaioresQueN(contatos, total - 1, n);
+}
+
+void stats(struct Contato contatos[], int total) {
+    if (total == 0) {
+        printf("Nenhum contato cadastrado.");
+        return;
+    }
+    int num;
+    printf("Digite um número: ");
+    scanf("%d",&num);
+
+    int resultado=nomes(contatos,total,num);
+    printf("Quantidade de contatos com nome maior que %d: %d",num,resultado);
 }
 
 int main()
@@ -147,12 +170,17 @@ int main()
         scanf("%d", &option);
 
         if (option == 1) {
-            cadastro(contatos, total);
-            total++;
+            cadastro(contatos, &total);
         } else if (option==2) {
             listar(contatos,total);
         } else if (option==3) {
             busca(contatos,total);
+        } else if (option==4) {
+            editar(contatos,total);
+        } else if (option==5) {
+            excluir(contatos,&total);
+        } else if (option == 6) {
+            stats(contatos,total);
         }
 
     } while(option!=7);
@@ -162,6 +190,5 @@ int main()
         return 0;
     }
 
-    
     return 0;
 }
