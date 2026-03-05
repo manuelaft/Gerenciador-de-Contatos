@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 
+// "molde" do contato (struct)
 struct Contato {
     char nome[50];
     char telefone[20];
