@@ -16,7 +16,7 @@ void busca(const struct Contato contatos[], int total);
 void editarContato(struct Contato *c);
 void editar(struct Contato contatos[], int total);
 void excluir(struct Contato contatos[], int *total);
-int  nomes(const struct Contato contatos[], int total, int n);
+int contarPorInicial(const struct Contato contatos[], int total, char letra);
 void stats(const struct Contato contatos[], int total);
 
 #endif

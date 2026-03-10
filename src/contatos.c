@@ -32,7 +32,7 @@ int telefoneValido(const char tel[]) {
 // cadastro
 void cadastro(struct Contato contatos[], int *total) { // void - sem retorno e sem tipo definido
     if (*total >= 100) {
-        printf("Limite de contatos atingido.");
+        printf("Limite de contatos atingido.\n");
         return;
     }
     printf("\nDigite o nome: ");
@@ -58,7 +58,7 @@ void cadastro(struct Contato contatos[], int *total) { // void - sem retorno e s
 // listar
 void listar(const struct Contato contatos[],int total) {
     if (total==0) {
-        printf("Nenhum contato cadastrado.");
+        printf("Nenhum contato cadastrado.\n");
         return;
     }
     for (int i=0;i<total;i++) {
@@ -81,7 +81,7 @@ int buscarIndice(const struct Contato contatos[], int total, const char nomeBusc
 // busca
 void busca(const struct Contato contatos[], int total) { // função para 2) buscar
     if (total==0){
-        printf("Nenhum contato cadastrado.");
+        printf("Nenhum contato cadastrado.\n");
         return;
     }
 
@@ -129,7 +129,7 @@ void editarContato(struct Contato *c) {
 
 void editar(struct Contato contatos[], int total) {
     if (total == 0) {
-        printf("Nenhum contato cadastrado.");
+        printf("Nenhum contato cadastrado.\n");
         return;
     }
 
@@ -150,7 +150,7 @@ void editar(struct Contato contatos[], int total) {
 // excluir
 void excluir(struct Contato contatos[],int *total) {
     if (*total==0) {
-        printf("Nenhum contato encontrado.");
+        printf("Nenhum contato encontrado.\n");
         return;
     }
     char nomeBuscado[50];
@@ -174,29 +174,28 @@ void excluir(struct Contato contatos[],int *total) {
 }
 
 // função recursiva
-int nomes(const struct Contato contatos[], int total, int n) {
-    if (total == 0) {
-        return 0;
-    }
+int contarPorInicial(const struct Contato contatos[], int total, char letra) {
+    if (total == 0) return 0;
 
     int contaAtual = 0;
-    if ((int)strlen(contatos[total - 1].nome) > n) {
+    if (contatos[total - 1].nome[0] == letra) { // case sensitive
         contaAtual = 1;
     }
 
-    return contaAtual + nomes(contatos, total - 1, n);
+    return contaAtual + contarPorInicial(contatos, total - 1, letra);
 }
 
 // stats
 void stats(const struct Contato contatos[], int total) {
     if (total == 0) {
-        printf("Nenhum contato cadastrado.");
+        printf("Nenhum contato cadastrado.\n");
         return;
     }
-    int num;
-    printf("Digite um número: ");
-    scanf("%d",&num);
 
-    int resultado=nomes(contatos,total,num);
-    printf("Quantidade de contatos com nome maior que %d: %d\n",num,resultado);
+    char letra;
+    printf("Digite uma letra (ex: A): ");
+    scanf(" %c", &letra); 
+
+    int resultado = contarPorInicial(contatos, total, letra);
+    printf("Quantidade de contatos que começam com '%c': %d\n", letra, resultado);
 }
