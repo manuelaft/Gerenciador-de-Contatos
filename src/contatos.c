@@ -1,6 +1,34 @@
 #include "contatos.h"
 #include <string.h>
 
+void lerLinha(char *dest, int tam) {
+    if (fgets(dest, tam, stdin) == NULL) {
+        dest[0] = '\0';
+        return;
+    }
+    dest[strcspn(dest, "\n")] = '\0'; // tira o \n
+}
+
+int emailValido(const char email[]) {
+    const char *arroba = strchr(email, '@');
+    if (arroba == NULL) {
+        return 0;
+    }
+    if (strchr(arroba, '.') == NULL) {
+        return 0;
+    } else {
+        return 1;
+    }
+}
+
+int telefoneValido(const char tel[]) {
+    int digitos = 0;
+    for (int i = 0; tel[i] != '\0'; i++) {
+        if (tel[i] >= '0' && tel[i] <= '9') digitos++;
+    }
+    return digitos >= 8;
+}
+
 // cadastro
 void cadastro(struct Contato contatos[], int *total) { // void - sem retorno e sem tipo definido
     if (*total >= 100) {
@@ -8,11 +36,21 @@ void cadastro(struct Contato contatos[], int *total) { // void - sem retorno e s
         return;
     }
     printf("\nDigite o nome: ");
-    scanf("%49s", contatos[*total].nome);
+    lerLinha(contatos[*total].nome, sizeof(contatos[*total].nome));
     printf("Telefone: ");
-    scanf("%19s",contatos[*total].telefone);
+    lerLinha(contatos[*total].telefone, sizeof(contatos[*total].telefone));
+
+    while (!telefoneValido(contatos[*total].telefone)) {
+        printf("Telefone inválido. Digite novamente: ");
+        lerLinha(contatos[*total].telefone, sizeof(contatos[*total].telefone));
+    }
     printf("E-mail: ");
-    scanf("%69s",contatos[*total].email);
+    lerLinha(contatos[*total].email, sizeof(contatos[*total].email));
+
+    while (!emailValido(contatos[*total].email)) {
+        printf("E-mail inválido. Digite novamente: ");
+        lerLinha(contatos[*total].email, sizeof(contatos[*total].email));
+    }
 
     (*total)++;
 }
@@ -50,8 +88,7 @@ void busca(const struct Contato contatos[], int total) { // função para 2) bus
     char nomeBuscado[50];
 
     printf("\nDigite o nome do contato que quer achar: ");
-    scanf("%49s",nomeBuscado);
-
+    lerLinha(nomeBuscado, sizeof(nomeBuscado));
     int index = buscarIndice(contatos,total,nomeBuscado); // chamando a função que acha o índice pelo nome
 
     if (index==-1) {
@@ -67,13 +104,27 @@ void busca(const struct Contato contatos[], int total) { // função para 2) bus
 // editar Contato
 void editarContato(struct Contato *c) {
     printf("\n--- Editar Contato ---\n");
+
     printf("Novo nome: ");
-    scanf("%49s",c->nome);
+    lerLinha(c->nome, sizeof(c->nome));
+
     printf("Novo telefone: ");
-    scanf("%19s",c->telefone);
+    lerLinha(c->telefone, sizeof(c->telefone));
+
+    while (!telefoneValido(c->telefone)) {
+        printf("Telefone inválido. Digite novamente: ");
+        lerLinha(c->telefone, sizeof(c->telefone));
+    }
+
     printf("Novo e-mail: ");
-    scanf("%69s",c->email);
-    printf("Contato atualizado com sucesso.");
+    lerLinha(c->email, sizeof(c->email));
+
+    while (!emailValido(c->email)) {
+        printf("E-mail inválido. Digite novamente: ");
+        lerLinha(c->email, sizeof(c->email));
+    }
+
+    printf("Contato atualizado com sucesso.\n");
 }
 
 void editar(struct Contato contatos[], int total) {
@@ -85,8 +136,7 @@ void editar(struct Contato contatos[], int total) {
     char nomeBuscado[50];
 
     printf("Digite o nome do contato que quer editar: ");
-    scanf("%49s", nomeBuscado);
-
+    lerLinha(nomeBuscado, sizeof(nomeBuscado));
     int index = buscarIndice(contatos, total, nomeBuscado);
 
     if (index == -1) {
@@ -106,8 +156,7 @@ void excluir(struct Contato contatos[],int *total) {
     char nomeBuscado[50];
 
     printf("Digite o nome do contato que quer excluir: ");
-    scanf("%49s",nomeBuscado);
-
+    lerLinha(nomeBuscado, sizeof(nomeBuscado));
     int index=buscarIndice(contatos, *total,nomeBuscado);
 
     if(index == -1) {
@@ -121,7 +170,7 @@ void excluir(struct Contato contatos[],int *total) {
     }
 
     (*total)--;
-    printf("Contato excluído com sucesso.");
+    printf("Contato excluído com sucesso.\n");
 }
 
 // função recursiva
@@ -149,5 +198,5 @@ void stats(const struct Contato contatos[], int total) {
     scanf("%d",&num);
 
     int resultado=nomes(contatos,total,num);
-    printf("Quantidade de contatos com nome maior que %d: %d",num,resultado);
+    printf("Quantidade de contatos com nome maior que %d: %d\n",num,resultado);
 }

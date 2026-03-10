@@ -18,6 +18,7 @@ int main()
         printf("[ 7 ] Sair\n");
         printf("Sua opção: ");
         scanf("%d", &option);
+        getchar(); // limpar o \n do buffer
 
         if (option == 1) {
             cadastro(contatos, &total);
@@ -31,6 +32,8 @@ int main()
             excluir(contatos,&total);
         } else if (option == 6) {
             stats(contatos,total);
+        } else if (option != 7) {
+            printf("Opção inválida. Tente novamente.\n");
         }
 
     } while(option!=7);
