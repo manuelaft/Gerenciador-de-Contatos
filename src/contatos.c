@@ -110,7 +110,7 @@ void editarContato(struct Contato *c) {
 
     printf("Novo telefone: ");
     scanf("%19s", c->telefone);
-    
+
     while (!telefoneValido(c->telefone)) {
         printf("Telefone inválido. Digite novamente: ");
         scanf("%19s", c->telefone);
