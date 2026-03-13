@@ -38,18 +38,18 @@ void cadastro(struct Contato contatos[], int *total) { // void - sem retorno e s
     printf("\nDigite o nome: ");
     lerLinha(contatos[*total].nome, sizeof(contatos[*total].nome));
     printf("Telefone: ");
-    lerLinha(contatos[*total].telefone, sizeof(contatos[*total].telefone));
+    scanf(" %19s", contatos[*total].telefone);
 
     while (!telefoneValido(contatos[*total].telefone)) {
         printf("Telefone inválido. Digite novamente: ");
-        lerLinha(contatos[*total].telefone, sizeof(contatos[*total].telefone));
+        scanf(" %19s", contatos[*total].telefone);
     }
     printf("E-mail: ");
-    lerLinha(contatos[*total].email, sizeof(contatos[*total].email));
+    scanf(" %69s", contatos[*total].email);
 
     while (!emailValido(contatos[*total].email)) {
         printf("E-mail inválido. Digite novamente: ");
-        lerLinha(contatos[*total].email, sizeof(contatos[*total].email));
+        scanf(" %69s", contatos[*total].email);
     }
 
     (*total)++;
@@ -109,19 +109,19 @@ void editarContato(struct Contato *c) {
     lerLinha(c->nome, sizeof(c->nome));
 
     printf("Novo telefone: ");
-    lerLinha(c->telefone, sizeof(c->telefone));
-
+    scanf("%19s", c->telefone);
+    
     while (!telefoneValido(c->telefone)) {
         printf("Telefone inválido. Digite novamente: ");
-        lerLinha(c->telefone, sizeof(c->telefone));
+        scanf("%19s", c->telefone);
     }
 
     printf("Novo e-mail: ");
-    lerLinha(c->email, sizeof(c->email));
+    scanf("%69s", c->email);
 
     while (!emailValido(c->email)) {
         printf("E-mail inválido. Digite novamente: ");
-        lerLinha(c->email, sizeof(c->email));
+        scanf("%69s", c->email);
     }
 
     printf("Contato atualizado com sucesso.\n");
