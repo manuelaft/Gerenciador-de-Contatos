@@ -1,6 +1,14 @@
 #include "contatos.h"
 #include <string.h>
 
+void lerLinha(char *dest, int tam) {
+    if (fgets(dest, tam, stdin) == NULL) {
+        dest[0] = '\0';
+        return;
+    }
+    dest[strcspn(dest, "\n")] = '\0'; // tira o \n
+}
+
 int emailValido(const char email[]) {
     const char *arroba = strchr(email, '@');
     if (arroba == NULL) {
@@ -28,14 +36,7 @@ void cadastro(struct Contato contatos[], int *total) { // void - sem retorno e s
         return;
     }
     printf("\nDigite o nome: ");
-    fgets(contatos[*total].nome, 50, stdin);
-
-    // validação pra deixar colocar nome composto
-    int len = strlen(contatos[*total].nome);
-    if (len > 0 && contatos[*total].nome[len - 1] == '\n') {
-        contatos[*total].nome[len - 1] = '\0';
-    }
-
+    lerLinha(contatos[*total].nome, sizeof(contatos[*total].nome));
     printf("Telefone: ");
     scanf(" %19s", contatos[*total].telefone);
 
@@ -87,14 +88,7 @@ void busca(const struct Contato contatos[], int total) { // função para 2) bus
     char nomeBuscado[50];
 
     printf("\nDigite o nome do contato que quer achar: ");
-    
-    fgets(nomeBuscado, sizeof(nomeBuscado), stdin);
-
-    int len = strlen(nomeBuscado);
-    if (len > 0 && nomeBuscado[len - 1] == '\n') {
-        nomeBuscado[len - 1] = '\0';
-    }
-
+    lerLinha(nomeBuscado, sizeof(nomeBuscado));
     int index = buscarIndice(contatos,total,nomeBuscado); // chamando a função que acha o índice pelo nome
 
     if (index==-1) {
@@ -112,12 +106,7 @@ void editarContato(struct Contato *c) {
     printf("\n--- Editar Contato ---\n");
 
     printf("Novo nome: ");
-    fgets(contatos[*total].nome, 50, stdin);
-
-    int len = strlen(contatos[*total].nome);
-    if (len > 0 && contatos[*total].nome[len - 1] == '\n') {
-        contatos[*total].nome[len - 1] = '\0';
-    }
+    lerLinha(c->nome, sizeof(c->nome));
 
     printf("Novo telefone: ");
     scanf("%19s", c->telefone);
